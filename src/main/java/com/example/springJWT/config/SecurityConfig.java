@@ -3,6 +3,7 @@ package com.example.springJWT.config;
 import com.example.springJWT.jwt.JWTFilter;
 import com.example.springJWT.jwt.JWTUtil;
 import com.example.springJWT.jwt.LoginFilter;
+import com.example.springJWT.repository.RefreshRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,7 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
+    private final RefreshRepository refreshRepository;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -82,7 +84,7 @@ public class SecurityConfig {
 
         // 커스텀 필터 등록
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
 
 
         // 세션 설정
