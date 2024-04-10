@@ -22,18 +22,22 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
         doFilter((HttpServletRequest) request, (HttpServletResponse) response, chain);
     }
 
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+
         //path and method verify
         String requestUri = request.getRequestURI();
-        if (!requestUri.matches("^\\\\/logout$")) {
-            filterChain.doFilter(request, response);
-        }
+        if (!requestUri.matches("^\\/logout$")) {
 
+            filterChain.doFilter(request, response);
+            return;
+        }
         String requestMethod = request.getMethod();
         if (!requestMethod.equals("POST")) {
+
             filterChain.doFilter(request, response);
             return;
         }
@@ -51,6 +55,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         //refresh null check
         if (refresh == null) {
+
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
